@@ -276,3 +276,107 @@ from collections import defaultdict, deque
 # Problem 8: Copying Seating Arrangements
 
 
+class Node():
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+
+# Function to test if two seating arrangements (graphs) are identical
+def compare_graphs(node1, node2, visited=None):
+    if visited is None:
+        visited = set()
+    
+    if node1.val != node2.val:
+        return False
+    
+    visited.add(node1)
+
+    if len(node1.neighbors) != len(node2.neighbors):
+        return False
+    
+    for n1, n2 in zip(node1.neighbors, node2.neighbors):
+        if n1 not in visited and not compare_graphs(n1, n2, visited):
+            return False
+
+    return True
+
+# function here 
+def copy_seating(seat):
+   
+    # newGraph = defaultdict(list)
+    # if not seat:
+    #     return None
+
+    # visited = set()
+    # queue = deque()
+    # queue.append(seat)
+    # visited.add(seat)
+    # while queue:
+    #     current = queue.popleft()
+    #     for i in current.neighbors:
+    #         if i not in visited:
+    #             newPoint = Node(current.val)
+    #             newNeighbor = Node(i.val)
+    #             newGraph[newPoint].append(newNeighbor)
+    #             visited.add(i)
+    #             queue.append(i)
+    # return newGraph
+    pass
+
+
+
+
+# Test Case 1: Simple graph with a cycle
+lily = Node("Lily Gladstone")
+mark = Node("Mark Ruffalo")
+cillian = Node("Cillian Murphy")
+danielle = Node("Danielle Brooks")
+lily.neighbors.extend([mark, danielle])
+mark.neighbors.extend([lily, cillian])
+cillian.neighbors.extend([danielle, mark])
+danielle.neighbors.extend([lily, cillian])
+
+copy = copy_seating(lily)
+print("Test Case 1:", compare_graphs(lily, copy))
+
+# Test Case 2: Single node, no neighbors
+single = Node("Single Celebrity")
+copy = copy_seating(single)
+print("Test Case 2:", compare_graphs(single, copy))
+
+# Test Case 3: Disconnected graph
+a = Node("A")
+b = Node("B")
+c = Node("C")
+# No neighbors
+copy = copy_seating(a)
+print("Test Case 3:", compare_graphs(a, copy))
+
+# Test Case 4: Large linear graph
+n1 = Node("Node 1")
+n2 = Node("Node 2")
+n3 = Node("Node 3")
+n4 = Node("Node 4")
+n5 = Node("Node 5")
+n1.neighbors.append(n2)
+n2.neighbors.append(n3)
+n3.neighbors.append(n4)
+n4.neighbors.append(n5)
+
+copy = copy_seating(n1)
+print("Test Case 4:", compare_graphs(n1, copy))
+
+# Test Case 5: Complex graph with multiple connections
+e1 = Node("E1")
+e2 = Node("E2")
+e3 = Node("E3")
+e4 = Node("E4")
+e5 = Node("E5")
+e1.neighbors.extend([e2, e3])
+e2.neighbors.extend([e1, e4])
+e3.neighbors.extend([e1, e4, e5])
+e4.neighbors.extend([e2, e3])
+e5.neighbors.append(e3)
+
+copy = copy_seating(e1)
+print("Test Case 5:", compare_graphs(e1, copy))
